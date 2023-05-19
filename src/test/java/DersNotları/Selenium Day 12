@@ -1,0 +1,81 @@
+Selenium Day 12
+-------------------------------------------------------------------------------------------------------------
+
+
+APACHE POI
+
+	Excel dosyasi okuma
+		- Excel dosyasinin pathini al -> String path
+		- Path ile bir FileInputStream olustur -> fis
+		- fis ile Workbook objesi olustur -> Workbook wb = WorkbookFactory.create(fis);
+
+		Hiyerarsi
+
+			-> Workbook - Sheet - Row - Cell
+
+			Bir hucreye ulasmak istiyorsak sirasiyla workbook-sheet-row uzerinden gelmeliyiz
+
+		Cok kullanilan methodlar
+			Workbook
+				wb.getSheet(String)
+				wb.getSheetAt(int)
+			Worksheet		
+				sheet.getRow(int)
+			Row		
+				row.getCell();
+			Cell		
+				cell.toString();
+
+
+		Islemler bittiginde:
+			-wb.close();
+			-fis.close();
+
+
+
+	Excel dosyasi yazma
+
+		-Yazma islemleri icin yine ayni stratejiyle Workbook aciyoruz (bkz. Excel dosyasi okuma)
+		-get methodlari yerine create methodlari kullaniyoruz (Eger data yoksa) -> 
+			createSheet(), 
+			createRow(), 
+			createCell(), 
+			setCellValue();
+
+		Eger veri varsa getSheet() getRow() getCell() methodlari ile hucreye kadar inip daha sonra setCellValue() methodu kullaniriz ve veriyi update ederiz.
+
+
+		Degisiklikleri yazmak icin yapilmasi gereken son islem
+			FileOutputStream olustur -> fos
+			wb.write(fos) methodunu cagir ve objeleri kapat
+
+			fis.close()
+			fos.close()
+			wb.close()
+
+
+
+SCREENSHOTS
+
+	Ekran goruntusu almanin iki yolu vardir 
+
+		1-tum ekranin goruntusunu almak
+
+			Tum ekran goruntusunu almak icin:
+				a- TakesScreenshot objesi olustur -> TakesScreenshot ts = (TakesScreenshot) driver;
+				b- Objenin tek methodunu cagir ve objeye ata -> File src = ts.getScreenshotAs(Output.FILE)
+				c- Alinan screenshot u dosyaya yaz -> FileHandler.copy(src, new File(filePath));
+		
+		2-Bir elementin ekran goruntusunu almak
+
+			Element goruntusunu almak icin:
+				a- Elementi locate et
+				b- Elementin methodunu cagir ve objeye ata -> File src = ele.getScreenshotAs(Output.FILE)
+				c- Alinan screenshot u dosyaya yaz -> FileHandler.copy(src, new File(filePath));
+
+
+
+BONUS (DATEFORMAT)
+
+
+	String date = new SimpleDateFormat("yyyy/MM/dd-hh/mm/ss").format(Date);
